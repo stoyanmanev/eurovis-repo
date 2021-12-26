@@ -1,0 +1,6 @@
+Notification component - да се направи така, че ако има повече от едно съобщение да качва по - старото по нагоре
+
+В момента сайтът е в dev-mode за да може при build да се актуализира автоматично.
+    За да се изключи dev-mode трябва да се премахне:
+        - Front End -> package.json -> "homepage": "./build/"
+        - Back End -> DevModeView -> "forward:/build/index.html" to "forward:/index.html" or delete

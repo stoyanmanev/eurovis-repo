@@ -1,0 +1,22 @@
+.container{
+    max-width: $rowMaxWidth;
+
+    &.full-width{
+        max-width: 100%;
+    }
+}
+
+.row{
+    &.j-center{
+        justify-content: center;
+    }
+}
+
+.col{
+    &.s-1{
+        margin-right: 8.3333%;
+    }
+    &.s-2{
+        margin-right: 16.6666%;
+    }
+}

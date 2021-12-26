@@ -1,0 +1,36 @@
+ul{
+    &.navi-main{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        list-style: none;
+        margin-bottom: 0;
+        height: 100%;
+    }
+    li{
+        margin-right: $base-gap;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: 700;
+        color: #aaa;
+        @extend %animated-transform;
+
+        &:hover,
+        &:active,
+        &:focus{
+            color: $dark;
+            cursor: pointer;
+        }
+
+        &:last-child{
+            margin-right: 0;
+        }
+
+        i{
+            &.fas{
+                display: block;
+                text-align: center;
+            }
+        }
+    }
+}

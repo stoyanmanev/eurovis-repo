@@ -1,0 +1,115 @@
+// Form styles
+form {
+	overflow: hidden;
+	width: 100%;
+
+	::-webkit-input-placeholder,
+    :-ms-input-placeholder,
+    ::-moz-placeholder,
+    :-moz-placeholder {
+		color: rgba($dark, 0.7) !important;
+	}
+
+	legend, span.legend {
+		@extend .h2;
+	}
+
+	label {
+		color: inherit;
+		display: block;
+		padding: 1rem 0 0.6rem;
+		position: relative;
+		clear:both;
+
+		small {
+			color: $alert;
+			display: inline-block;
+			line-height: 0.5rem;
+		}
+	}
+
+	small {
+		line-height: 1rem;
+		display: inline-block;
+		font-size:0;
+		&:before{
+			content:'(Required)';
+			font-size:1rem;
+			padding-left:rem(6px);
+		}
+	}
+
+	[type="text"],
+	[type="tel"],
+	[type="email"],
+	[type="file"],
+	input,
+	textarea,
+	select {
+		@extend %animated-transform;
+		background: $light;
+		border: $base-border;
+		color: $dark;
+		display: block;
+		font-family: $main-font;
+		font-size: $base-font-size;
+		line-height: $base-line-height;
+		margin: 0 0 0.5rem 0;
+		padding: 0.8rem;
+		position: relative;
+		resize: none;
+		width: 100%;
+		border-radius: 15px;
+
+		&:focus {
+			background: darken($light, 2%);
+			outline: none;
+		}
+	}
+
+	textarea {
+		min-height: 7.5rem;
+		padding-top: 0.9rem;
+	}
+
+	[type="checkbox"] {
+		display: inline-block;
+		margin: 0 $base-font-size 0 0;
+		padding: 0;
+		width: $base-font-size;
+		height: $base-font-size;
+		flex-shrink: 0;
+		border-radius: 0;
+
+	}
+
+	[type="radio"] {
+		margin: 0 15px 0 0;
+        width: 15px;
+		min-height: auto;
+		flex-shrink: 0;
+	}
+
+	button,
+	[type="submit"] {
+		@extend .btn;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+		width: 100%;
+    }
+
+	div[data-field-error] {
+	    background: red;
+	    color: #fff;
+	    padding: 1rem;
+	    border-radius: 15px;
+
+	}
+
+}
+.login-form-container{
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
