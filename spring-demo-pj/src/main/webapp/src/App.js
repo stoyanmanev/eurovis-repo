@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React , {useState, useEffect} from "react";
 import axios from "axios";
 import Login from "./components/Login";
 import Home from './components/Home';
@@ -7,10 +7,11 @@ function App() {
 
   const [activeUser, setActiveUser] = useState(false);
 
-  axios.get(window.location.origin + '/activeUser').then(res => {
-    res.data ? setActiveUser(true) : setActiveUser(false);
-  });
-
+  useEffect(() => {
+    axios.get(window.location.origin + '/activeUser').then(res => {
+      res.data ? setActiveUser(true) : setActiveUser(false);
+    });
+  }, []);
 
   return (
     <div className="App">

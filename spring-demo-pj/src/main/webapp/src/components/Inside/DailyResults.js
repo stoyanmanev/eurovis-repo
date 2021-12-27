@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 
 import Result from "./Result";
@@ -32,13 +32,13 @@ const DailyResults = () =>{
         axios.post(window.location.origin + '/daily-record', null, {params : data}).then(
             (res) => {
                if(res.status === 200){
-                    alert('success');
+                    setDay(undefined);
+                    renderDR();
                };
             }
         ).catch(
             error => {
                 alert('create-record-error: ' + error);
-                
             }
         );
     }
@@ -63,7 +63,9 @@ const DailyResults = () =>{
             if(res.status === 200 && res.data === true){ 
                 setDay(newDate);
                 getIp(); 
-            };
+            }else if(res.data === false){
+                renderDR();
+            }
         }).catch(err => {
             alert('check error: ' + err);
         });
@@ -74,13 +76,7 @@ const DailyResults = () =>{
     }else{
        if(day !== undefined && ip !== undefined){
             createRecord();
-            console.log('check first')
        }
-    }
-    
-    if(!result){
-       renderDR();
-       console.log('render first')
     }
 
     return(

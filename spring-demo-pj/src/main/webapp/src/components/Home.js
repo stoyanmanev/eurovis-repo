@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 
 import Header from "./Templates/Header";
@@ -8,12 +8,12 @@ import ConvertEmailToUsername from "./Templates/ConvertEmailToUsername";
 
 const Home = props =>{
 
-    const [user, setUser] = useState({res:null});
+    const [user, setUser] = useState(null);
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
 
 
-    const ActiveUser = props =>{
+    useEffect(() => {
         axios.get(window.location.origin + '/userInfo', null).then((res) => {
             if(res.status === 200){
                 setUser(res.data);
@@ -23,11 +23,8 @@ const Home = props =>{
         }).catch(err => {
             window.location.reload(false);
         });
-    }
-
-    if(user.res === null){
-        ActiveUser();
-    }
+    }, [])
+    
 
     return(
         <>

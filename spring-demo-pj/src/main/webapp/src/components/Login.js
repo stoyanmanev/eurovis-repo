@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 
 import Form from "./UI/Form";
@@ -20,7 +20,7 @@ const Login = props => {
         event.preventDefault();
 
         const data = {email : email, password : password};
-
+        
         axios.post(window.location.origin + '/login', null, { params: data }).then((res) => {
             if(res.status === 200){
                 props.setUser(true);
