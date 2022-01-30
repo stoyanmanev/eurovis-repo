@@ -1,0 +1,17 @@
+.loading-page {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  background-color: rgba(rgb(122, 122, 122), 0.85);
+
+  img{
+    height: 90px;
+    width: 90px;
+  }
+}

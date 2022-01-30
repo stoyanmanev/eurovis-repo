@@ -1,0 +1,60 @@
+.login-form-container{
+
+    form{
+        font-size: 16px;
+        line-height: 28px;
+        padding: 70px 70px 57px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        background-color: $light;
+        border-top: 3px solid $white-blue;
+
+        legend{
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 400;
+            border-bottom: 0;
+        }
+
+        input,
+        select,
+        textarea{
+            font-size: 16px;
+            line-height: 28px;
+            border-radius: 0;
+            border: 1px solid $medium;
+            flex-basis: 66.6666%;
+            max-width: 66.6666%;
+
+            &:focus,
+            &:visited,
+            &:focus-within
+            &:target
+            &:focus-visible{
+                background-color: $focus;
+            }
+        }
+
+        small{
+            display: none;
+        }
+
+        label{
+            flex-basis: 33.3333%;
+            max-width: 33.3333%;
+            border: 1px solid $medium;
+            background-color: $white-gray;
+            padding: 12.8px $base-gap;
+            font-weight: normal;
+            margin-bottom: 8px;
+            z-index: 1;
+        }
+        button,
+        [type='submit']{
+            border-radius: 0;
+            background-color: $white-blue;
+        }
+    }
+}

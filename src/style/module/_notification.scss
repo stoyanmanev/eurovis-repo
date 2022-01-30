@@ -1,0 +1,154 @@
+// .notification-area{
+//     position: fixed;
+//     bottom: 40px;
+//     left: $base-gap;
+//     max-width: 240px;
+//     background-color: $primary;
+//     transform: translateX(calc(-100% - 36px));
+//     visibility: hidden;
+//     opacity: 0;
+//     transition: all .2s ease-in-out;
+//     z-index: 9999999;
+//     min-height: 100px;
+//     min-width: 200px;
+
+//     &.error{
+//         background-color: $alert;
+//     }
+//     &.success{
+//         background-color: #28a745;
+//     }
+//     &.warning{
+//         background-color: #ffc107;
+//     }
+
+//     .close{
+//         position: absolute;
+//         top: $base-gap / 2 - 2px;
+//         right: $base-gap / 2 - 2px;
+//         font-size: 12px;
+//         line-height: 12px;
+//         color: $light;
+//         cursor: pointer;
+//     }
+
+//     &.show-notification{
+//         transform: translateX(0);
+//         visibility: visible;
+//         opacity: 1;
+
+//         &.animation{
+//             animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+//             transform: translate3d(0, 0, 0);
+//             backface-visibility: hidden;
+//             perspective: 1000px;
+//         }
+//     }
+// }
+// .note-content{
+//     height: 100%;
+//     width: 100%;
+//     display: block;
+//     color: $light;
+//     padding: $base-gap;
+//     font-size: 16px;
+//     line-height: 26px;
+//     strong{
+//         font-size: 18px;
+//         line-height: 28px;
+//     }
+// }
+
+
+.notification-area {
+	position: fixed;
+	bottom: 40px;
+	left: 40px;
+	z-index: 999999;
+	visibility: hidden;
+	display: block;
+	
+	.notification {
+		display: block;
+		position: relative;
+		transition: 300ms all ease-in-out;
+		overflow: hidden;
+		padding:0;
+		background: $alert;
+        font-size: 16px;
+        line-height: 22px;
+		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.35);
+		width: 300px;
+		max-width: calc(100vw - 80px);
+		transform-origin: left center;
+		visibility: hidden;
+		opacity: 0;
+		max-height:none;
+		height: 0;
+		box-sizing:border-box;
+		margin-left:-100px;
+	
+		.note-content {
+			padding:1rem;
+			display: block;
+		}
+		
+	
+		&.transition-in {
+			visibility: visible;
+			opacity: 1;
+			max-height:9999999px;
+			height: auto;
+			margin-left:0;
+		}
+		&.transition-out{
+			margin-left: -100px;
+			opacity: 0;
+			height: auto;
+			visibility: hidden;
+		}
+	
+		&,
+		a {
+			color: $light;
+		}
+	
+		&.success {
+			background: #333;
+		
+			&, .close {
+				color: #fff;
+			}
+		}
+		&.error {
+			background: $alert
+		}
+		&.success, &.error {
+			p {
+				margin-bottom: rem(5px);
+			}
+			p + ul {
+				margin-top: rem(5px);
+			}
+		}
+	
+		.close {
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding-top: 5px;
+			padding-right: 8px;
+			cursor: pointer;
+			color: #fff;
+			font-size: 1.2rem;
+			@extend %animated-transform;
+		}
+	
+		&.hide {
+			margin-left:-100px;
+			opacity: 0;
+			visibility: hidden;
+			height:0;
+		}
+	}
+}

@@ -1,0 +1,188 @@
+* {
+	margin: 0;
+	padding: 0;
+
+	&,
+	&:before,
+	&:after {
+		box-sizing: inherit;
+	}
+}
+
+html {
+	background: $light;
+	box-sizing: border-box;
+	color: $dark;
+	font-family: $main-font;
+	font-size:calc(100% * ($base-font-size / 16px));
+	font-weight: 300;
+	hyphens: manual;
+	line-height: $base-line-height;
+	scroll-behavior: smooth;
+	text-size-adjust: none;
+}
+
+body {
+	line-height: $base-line-height;
+	opacity: 1 !important;
+	background: $white-gray;
+
+}
+
+iframe,
+[data-iframe] {
+	border: none;
+	width: 100%;
+}
+
+strong,b{
+	font-weight: 700;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	display: block;
+	text-rendering: optimizeLegibility;
+	hyphens: auto;
+	color: $dark;
+	line-height: 1.3em;
+	font-weight: 600;
+	font-family: $main-font;
+	margin-bottom: 26px;
+
+	span{
+		display: block;
+		font-weight: 400;
+		color: $dark;
+	}
+}
+
+h1,
+.h1 {
+	font-size: $h1-size;
+	line-height: 1.2em;
+	margin-bottom: 15px;
+
+	span{
+		font-size: 26px;
+	}
+}
+
+h2,
+.h2 {
+	font-size: $h2-size;
+}
+
+h3,
+.h3 {
+	font-size: $h3-size;
+}
+
+h4,
+.h4 {
+	font-size: $h4-size;
+}
+
+h5,
+.h5 {
+	font-size: $h5-size;
+}
+
+h6,
+.h6 {
+	font-size: $h6-size;
+}
+
+/**
+ * Links
+ */
+a {
+	position: relative;
+	color: $dark;
+	word-wrap: break-word;
+	text-decoration: none;
+	transition: all .3s ease-in-out;
+
+	&:hover,
+	&:focus,
+	&:active {
+		color: $dark;
+	}
+}
+
+a:not(.btn):focus,
+[tabindex]:focus {
+	outline: $outline;
+	outline-offset: 5px;
+}
+
+img {
+	vertical-align: bottom;
+	float: none;
+	height: auto;
+	max-width: 100%;
+	width: 100%;
+}
+
+/**
+ * Tables
+ */
+main {
+	table {
+		display: table;
+		border-collapse: collapse;
+		width: 100%;
+		max-width: 100%;
+		text-align: left;
+		font-size: $base-font-size;
+
+		caption {
+			text-align: left;
+			padding: $base-gap $base-gap 25px;
+			display: table-caption;
+			font-weight: bold;
+			font-size: 1.2rem;
+		}
+
+		thead {
+			border-collapse: collapse;
+			display: table-header-group;
+		}
+
+		tbody {
+			width: 100%;
+			overflow-x: scroll;
+			display: table-row-group;
+
+			tr {
+				padding: $base-gap 0;
+
+				&:not(:last-child) {
+					border-bottom: rem(1px) solid $medium;
+				}
+			}
+		}
+
+		tr {
+			display: table-row;
+		}
+
+		th,
+		td {
+			padding: $base-gap;
+			display: table-cell;
+			vertical-align: top;
+		}
+
+	}
+}

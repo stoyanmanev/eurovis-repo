@@ -1,0 +1,51 @@
+.navi-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  list-style: none;
+  margin-bottom: 0;
+  height: 100%;
+}
+a {
+  margin-right: $base-gap;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  color: #aaa;
+  @extend %animated-transform;
+
+  &:hover,
+  &:active,
+  &:focus {
+    cursor: pointer;
+    span,
+    svg{
+      color: rgba(#aaa, .4);
+    }
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &.active {
+    span{
+      color: rgba($primary, .4);
+    }
+    svg{
+      color: rgba($primary, .4)
+    }
+  }
+
+  span {
+    display: block;
+  }
+  svg {
+    display: block;
+  }
+  span,
+  svg{
+    text-align: center;
+    @extend %animated-transform;
+  }
+}
