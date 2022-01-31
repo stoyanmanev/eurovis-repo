@@ -3,33 +3,33 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
 import Result from "./Result";
+import ModalDailyResults from "../Templates/ModalDailyResults";
 import { Table } from "react-bootstrap";
-import { setLoading } from "../../redux/actions";
-import { isLoading } from "../../redux/reducers";
+import { setLoading, setDailyResult } from "../../redux/actions";
+import { isLoading, isDailyResults } from "../../redux/reducers";
 import Loading from "../Templates/Loader";
 
 const DailyResultComponent = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.isLoading);
+  const dailyResults = useSelector((state) => state.isDailyResults);
 
-  const [result, setResult] = useState(false);
   const [day, setDay] = useState(undefined);
   const [ip, setIp] = useState(undefined);
   const [check, setCheck] = useState(true);
+  const [openModal, setOpenModal] = useState(true);
+  console.log('parrent' + openModal);
+
 
   const renderDR = () => {
     axios
       .get(window.location.origin + "/results", null)
       .then((res) => {
-        setResult(res.data); // todo redux
+        dispatch(setDailyResult(res.data));
       })
       .catch((error) => {
         alert("render: " + error);
       })
-      .finally(() => {
-          console.log('finally');
-        // dispatch(setLoading(false));
-      });
   };
 
   const createRecord = () => {
@@ -49,7 +49,7 @@ const DailyResultComponent = () => {
       })
       .catch((error) => {
         alert("create-record-error: " + error);
-      })
+      });
   };
 
   const getIp = () => {
@@ -64,8 +64,6 @@ const DailyResultComponent = () => {
   };
 
   const checkResult = () => {
-    // dispatch(setLoading(true));
-    console.log('check');
     setCheck(false);
 
     const newDate = new Date().toLocaleString("en-GB");
@@ -95,17 +93,17 @@ const DailyResultComponent = () => {
       createRecord();
     }
   }
-
-//   if (loading) {
-//     return <Loading />;
-//   }
+  
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>
       <h1>Daily Results</h1>
-      <Table striped bordered hover>
+      <Table striped bordered hover className="daily-results">
         <thead>
-          <tr>
+          <tr className="text-center">
             <th>View</th>
             <th>Send</th>
             <th>Date</th>
@@ -118,9 +116,9 @@ const DailyResultComponent = () => {
         </thead>
         <tbody>
           {
-            result !== false ? (
+            dailyResults !== [] ? (
               <>
-                {result.map((res) => (
+                {dailyResults.map((res) => (
                   <Result data={res} />
                 ))}
               </>
@@ -130,6 +128,7 @@ const DailyResultComponent = () => {
           }
         </tbody>
       </Table>
+      {openModal && <ModalDailyResults show={setOpenModal} state={openModal}/>}   
     </>
   );
 };

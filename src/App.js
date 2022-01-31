@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setActiveUser, setUser } from "./redux/actions";
+import { setActiveUser, setUser, setLoading } from "./redux/actions";
 import axios from "axios";
 
 import Login from "./components/Login";
 import Header from "./components/Templates/Header";
-import ConvertEmailToUsername from "./components/Templates/ConvertEmailToUsername";
-import { setLoading } from "./redux/actions";
-import { isLoading } from "./redux/reducers";
 import Loading from "./components/Templates/Loader";
+import ConvertEmailToUsername from "./components/Templates/ConvertEmailToUsername";
+import { isLoading } from "./redux/reducers";
 
-import { Container, Row, Col } from "react-bootstrap";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { handleClick } from "./events/onClick";
 import routes from "./routes";
 
 import "./style/style.scss";
 
 function App() {
   const dispatch = useDispatch();
+
+  document.getElementById("root").addEventListener("click", handleClick);
 
   const loading = useSelector((state) => state.isLoading);
   const activeUser = useSelector((state) => state.isActiveUser);
@@ -73,7 +75,7 @@ function App() {
     }
   }, [activeUser]);
 
-  if(loading){
+  if (loading) {
     return <Loading />;
   }
 

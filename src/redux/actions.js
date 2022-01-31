@@ -20,3 +20,10 @@ export function setUser(value){
     payload: value,
   };
 }
+
+export function setDailyResult(value){
+  return {
+    type: actionTypes.SET_DAILY_RESULTS,
+    payload: value,
+  };
+}

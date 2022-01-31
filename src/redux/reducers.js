@@ -28,9 +28,21 @@ export function isUser(state = null, action) {
   }
 }
 
+export function isDailyResults(state = [], action) {
+  switch (action.type) {
+    case actionTypes.SET_DAILY_RESULTS:
+      return action.payload;
+    default:
+      return state
+  }
+}
+
+
+
 
 export default combineReducers({ 
     isUser,
     isLoading,
     isActiveUser,
+    isDailyResults,
 })

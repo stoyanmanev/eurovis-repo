@@ -26,12 +26,35 @@
 	text-align: center;
 	text-decoration: none;
 	font-family: $main-font;
-    min-width: 230px;
+    // min-width: 230px;
 	padding: 16px $base-line-height 14px;
 
 	&:hover, &:active, &:focus{
 		background: $dark;
 		color: $light !important;
+	}
+	&.submit-result,
+	&.view-result{
+		min-width: auto;
+		padding: 2px 18px;
+		&:hover, &:active, &:focus{
+			background: $secondary;
+		}
+
+		svg{
+			pointer-events: none;
+		}
+	}
+
+	&.submit-result{
+		background-color: $primary;
+		margin-bottom: 0;
+		
+	}
+	&.view-result{
+		background-color: $dark-medium;
+		margin-bottom: 0;
+		
 	}
 
 }
