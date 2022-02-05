@@ -1,4 +1,3 @@
-
 const map = {
   submitResult: openResultForm,
   viewResult: viewResultForm,

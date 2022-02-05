@@ -11,15 +11,12 @@ import Loading from "./components/Templates/Loader";
 import ConvertEmailToUsername from "./components/Templates/ConvertEmailToUsername";
 import { isLoading } from "./redux/reducers";
 
-import { handleClick } from "./events/onClick";
 import routes from "./routes";
 
 import "./style/style.scss";
 
 function App() {
   const dispatch = useDispatch();
-
-  document.getElementById("root").addEventListener("click", handleClick);
 
   const loading = useSelector((state) => state.isLoading);
   const activeUser = useSelector((state) => state.isActiveUser);

@@ -9,6 +9,7 @@ import { setLoading, setDailyResult } from "../../redux/actions";
 import { isLoading, isDailyResults } from "../../redux/reducers";
 import Loading from "../Templates/Loader";
 
+
 const DailyResultComponent = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.isLoading);
@@ -17,9 +18,8 @@ const DailyResultComponent = () => {
   const [day, setDay] = useState(undefined);
   const [ip, setIp] = useState(undefined);
   const [check, setCheck] = useState(true);
-  const [openModal, setOpenModal] = useState(true);
-  console.log('parrent' + openModal);
-
+  const [openModal, setOpenModal] = useState(false);
+  const [dailyData, setDailyData] = useState({});
 
   const renderDR = () => {
     axios
@@ -119,7 +119,7 @@ const DailyResultComponent = () => {
             dailyResults !== [] ? (
               <>
                 {dailyResults.map((res) => (
-                  <Result data={res} />
+                  <Result data={res} handler={setOpenModal} dailyData={setDailyData}/>
                 ))}
               </>
             ) : (
@@ -128,7 +128,7 @@ const DailyResultComponent = () => {
           }
         </tbody>
       </Table>
-      {openModal && <ModalDailyResults show={setOpenModal} state={openModal}/>}   
+      {openModal && <ModalDailyResults show={setOpenModal} state={openModal} data={dailyData}/>}   
     </>
   );
 };
