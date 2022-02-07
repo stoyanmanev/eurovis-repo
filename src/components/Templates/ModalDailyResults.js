@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Form from "../UI/Form";
 import Input from "../UI/Input";
+import {makeTaskGroup} from "../../events/onModal"
 
 export default function ModalDailyResults(props) {
   const [range, setRange] = useState(0);
@@ -32,10 +33,68 @@ export default function ModalDailyResults(props) {
     setRangeMaxValue(predicate, props)
   };
 
-  const setRangeMaxValue = (predicate, props) => {
-    if(!predicate) setRange(12);
 
-    console.log(predicate ,props)
+  const setRangeMaxValue = (predicate, props) => {
+    if(!predicate) return setRange(720);
+
+    function getMaxValueRange(h) {
+      const stime = convertSTime(h);
+      const ntime = getTimeNow();
+  
+      function convertSTime(h) {
+        const arr = h.split(":");
+        arr.pop();
+        return arr.join(":");
+      }
+  
+      function getTimeNow() {
+        const date = new Date();
+        const hour = date.getHours();
+        const minutes = date.getMinutes();
+  
+        return `${hour}:${minutes}`;
+      }
+  
+      function mathValue(s, n) {
+        const sDes = s.split(":");
+        const nDes = n.split(":");
+        let minutes = 0;
+        let hour = 0;
+  
+        parseInt(nDes[1]) > parseInt(sDes[1])
+          ? (minutes = parseInt(nDes[1]) - parseInt(sDes[1]))
+          : (minutes = parseInt(nDes[1]) + 60 - parseInt(sDes[1]));
+        parseInt(nDes[1]) > parseInt(sDes[1])
+          ? (hour = parseInt(nDes[0]) - parseInt(sDes[0]))
+          : (hour = parseInt(nDes[0] - 1) - parseInt(sDes[0]));
+  
+        minutes < 10 ? minutes = `0${minutes}` : minutes = `${minutes}`;
+        hour < 10 ? hour = `0${hour}` : hour =  `${hour}`;
+  
+        return `${hour}:${minutes}`
+      }
+  
+      const time = mathValue(stime, ntime);
+      
+      const res = converTtoR(time)
+  
+      function converTtoR(t){
+          const h = t.split(":")[0]
+          const m = t.split(":")[1]
+  
+          return parseInt(h) * 60 + parseInt(m);
+      }
+  
+      return res;
+    }
+    setRange(getMaxValueRange(props.data.startTime));
+  }
+
+  function handleClickAdd(e){
+    const parent = e.target.parentElement.parentElement;
+    const children = parent.children;
+    const ticketArea = Object.values(children).filter(x => x.id === "ticket-mis");
+    makeTaskGroup(ticketArea, e, range);
   }
 
   useEffect(() => {
@@ -59,9 +118,9 @@ export default function ModalDailyResults(props) {
       </Modal.Header>
       <Modal.Body>
         <div className="text-uppercase">Misceleaneous</div>
-        <div className="ticket-area"></div>
+        <div id="ticket-mis" className="ticket-area"></div>
         <div className="btn-area">
-          <Button className="text-uppercase add-btn">
+          <Button className="text-uppercase add-btn" onClick={(e) => {handleClickAdd(e)}}>
             <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
         </div>
@@ -79,7 +138,8 @@ export default function ModalDailyResults(props) {
                 data_not_required={true}
                 max={range}
                 min="0"
-                step="0.05"
+                step="5"
+                handleChange="change"
               ></Input>
               <Badge bg="secondary" className="d-inline">
                 {"00:00"}
@@ -94,7 +154,8 @@ export default function ModalDailyResults(props) {
                 data_not_required={true}
                 max={range}
                 min="0"
-                step="0.05"
+                step="5"
+                handleChange="change"
               ></Input>
               <Badge bg="secondary" className="d-inline">
                 {"00:00"}
