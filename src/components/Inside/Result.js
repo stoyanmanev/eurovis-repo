@@ -31,7 +31,7 @@ const Result = (props) => {
   }
 
   return (
-    <tr className="text-center">
+    <tr id={props.data.date} className="text-center">
       <td>
         <Button name="viewResult" className="view-result">
           <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
