@@ -5,32 +5,33 @@ export function handleChange(e) {
   const badge = Object.values(children).filter((x) =>
     x.classList.contains("badge")
   );
-
-  function converValue(target, badge) {
-    let hours = 0;
-    let minutes = 0;
-
-    for (let x = target.value; x >= 60; x -= 60) {
-      hours++;
-    }
-
-    minutes = target.value - hours * 60;
-
-    if (hours < 10) hours = `0${hours}`;
-    if (minutes < 10) minutes = `0${minutes}`;
-
-    const v = `${hours}:${minutes}`;
-
-    setValue(badge, v, target);
-  }
-
-  function setValue(arr, val, target) {
-    target.dataset.value = val;
-    Object.values(arr).forEach((x) => (x.innerText = val));
-  }
-
   converValue(e.target, badge);
+  saveInputGroup(e);
 }
+
+function converValue(target, badge) {
+  let hours = 0;
+  let minutes = 0;
+
+  for (let x = target.value; x >= 60; x -= 60) {
+    hours++;
+  }
+
+  minutes = target.value - hours * 60;
+
+  if (hours < 10) hours = `0${hours}`;
+  if (minutes < 10) minutes = `0${minutes}`;
+
+  const v = `${hours}:${minutes}`;
+  setValue(badge, v, target);
+}
+
+function setValue(arr, val, target) {
+  target.dataset.value = val;
+  Object.values(arr).forEach((x) => (x.innerText = val));
+}
+
+// create new task when click the add button
 
 export function makeTaskGroup(area, e, range) {
   const div = document.createElement("div");
@@ -69,13 +70,14 @@ export function makeTaskGroup(area, e, range) {
   Object.values(area)[0].appendChild(div);
 }
 
+//-- create new task when click the add button
+
 export function getFormValues(form) {
   const inputs = Object.values(form.children).map((x) =>
     Object.values(x.children).filter((x) => x.nodeName === "INPUT")
   );
   const arr = Object.values(inputs).filter((x) => x[0]);
   const robj = {};
-  // arr.forEach(x => console.log(x[0]));
   arr.forEach((x) => {
     const el = x[0];
     if (el.type === "range")
@@ -128,4 +130,47 @@ export function calcFinalWT(obj) {
   }
 
   return robj;
+}
+
+function saveInputGroup(e) {
+  const parent =
+    e.currentTarget.parentElement.parentElement.parentElement.classList.contains(
+      "control-area"
+    )
+      ? e.currentTarget.parentElement.parentElement.parentElement.parentElement
+      : e.currentTarget.parentElement.parentElement.parentElement;
+  const group = parent.querySelectorAll('input[type*="range"]');
+
+  // const parent = e.currentTarget.parentElement.parentElement;
+  // const group = Object.values(parent.children).map((x) => x.children);
+  // const inputs = group.map((x) =>
+  //   Object.values(x).filter((x) => x.type === "range")
+  // );
+
+  const list = [];
+  group.length > 0 &&
+  group
+    .forEach(
+      (x) => {if(typeof x?.value !== "undefined" && x.id !== "working-time"){
+        list.push(x);
+      }
+    }
+    )
+
+  const sum = list.length > 0 && list.map( x => parseInt(x.value)).reduce((a,b) => a + b);
+  const wb = list.filter(x => x.id === "work-break");
+  const targetInput = document.getElementById("working-time");
+  targetInput.value = sum;
+  targetInput.dataset.break = wb[0].value;
+  converValue(targetInput, getWorkBadge(targetInput));
+}
+
+function getWorkBadge(input) {
+  const parent = input.parentElement;
+  const children = parent.children;
+  const arrbadge = Object.values(children).filter((x) =>
+    x.classList.contains("badge")
+  );
+  const badge = arrbadge[0];
+  return [badge];
 }
