@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { getDailyTaks } from "../../events/onDailyResults";
 
 const Result = (props) => {
   function getCurrentValue(e, name) {
@@ -28,6 +29,7 @@ const Result = (props) => {
 
     data(obj);
     view(true);
+    getDailyTaks(obj.date, event)
   }
 
   return (

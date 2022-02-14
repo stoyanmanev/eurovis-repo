@@ -9,6 +9,7 @@ import {
 import Input from "../UI/Input";
 import { makeTaskGroup, getFormValues, calcFinalWT } from "../../events/onModal";
 import { setWorkingTime } from "../../events/onDailyResults";
+import { saveDailyTasks, fetchTask } from "../../events/saveDailyTasks";
 
 export default function ModalDailyResults(props) {
   const [range, setRange] = useState(0);
@@ -103,8 +104,11 @@ export default function ModalDailyResults(props) {
     const finalwt = calcFinalWT(obj);
 
     if(e.nativeEvent.submitter.id === "save-btn"){
+      const fetchData = saveDailyTasks(e);
       setWorkingTime(finalwt, props.data.date);
-      props.show(false);
+      const sendData = fetchTask(fetchData, props.data.date);
+      // console.log(fetchData);
+      // props.show(false);
     }
   }
 

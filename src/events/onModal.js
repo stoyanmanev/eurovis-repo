@@ -33,25 +33,26 @@ function setValue(arr, val, target) {
 
 // create new task when click the add button
 
-export function makeTaskGroup(area, e, range) {
+export function makeTaskGroup(area, e, range, data = {}) {
   const div = document.createElement("div");
   const appendList = [
-    makeInput("text", e.timeStamp),
-    makeInput("range", e.timeStamp),
-    makeBadge(),
+    makeInput("text", e.timeStamp, data),
+    makeInput("range", e.timeStamp, data),
+    makeBadge(data),
   ];
   div.classList.add("form-group");
 
-  function makeInput(type, unique) {
+  function makeInput(type, unique, data) {
     const input = document.createElement("input");
     input.type = type;
     input.name = `${type}-${parseInt(unique)}`;
     input.id = `${type}-${parseInt(unique)}`;
+    data.task && (input.value = data.task)
 
     if (type === "range") {
       input.max = range;
       input.min = "0";
-      input.value = "0";
+      data.range ? input.value = data.range : input.value = "0";
       input.step = "5";
       input.onchange = function (e) {
         handleChange(e);
@@ -60,10 +61,10 @@ export function makeTaskGroup(area, e, range) {
 
     return input;
   }
-  function makeBadge() {
+  function makeBadge(data = {}) {
     const span = document.createElement("span");
     span.classList.add("d-inline", "badge", "bg-secondary");
-    span.innerHTML = "00:00";
+    data.workTime ? span.innerHTML = data.workTime : span.innerHTML = "00:00";
     return span;
   }
   appendList.forEach((x) => div.appendChild(x));
@@ -140,12 +141,6 @@ function saveInputGroup(e) {
       ? e.currentTarget.parentElement.parentElement.parentElement.parentElement
       : e.currentTarget.parentElement.parentElement.parentElement;
   const group = parent.querySelectorAll('input[type*="range"]');
-
-  // const parent = e.currentTarget.parentElement.parentElement;
-  // const group = Object.values(parent.children).map((x) => x.children);
-  // const inputs = group.map((x) =>
-  //   Object.values(x).filter((x) => x.type === "range")
-  // );
 
   const list = [];
   group.length > 0 &&
