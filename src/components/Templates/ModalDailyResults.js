@@ -106,9 +106,7 @@ export default function ModalDailyResults(props) {
     if(e.nativeEvent.submitter.id === "save-btn"){
       const fetchData = saveDailyTasks(e);
       setWorkingTime(finalwt, props.data.date);
-      const sendData = fetchTask(fetchData, props.data.date);
-      // console.log(fetchData);
-      // props.show(false);
+      const sendData = fetchTask(fetchData, props.data.date, obj['working-time']);
     }
   }
 

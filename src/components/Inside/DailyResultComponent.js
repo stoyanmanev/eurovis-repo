@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
 import Result from "./Result";
 import ModalDailyResults from "../Templates/ModalDailyResults";
 import { Table } from "react-bootstrap";
-import { setLoading, setDailyResult } from "../../redux/actions";
+import { setDailyResult } from "../../redux/actions";
 import { isLoading, isDailyResults } from "../../redux/reducers";
 import Loading from "../Templates/Loader";
-
 
 const DailyResultComponent = () => {
   const dispatch = useDispatch();
@@ -26,10 +25,11 @@ const DailyResultComponent = () => {
       .get(window.location.origin + "/results", null)
       .then((res) => {
         dispatch(setDailyResult(res.data));
+        getNotEndTask(res.data);
       })
       .catch((error) => {
         alert("render: " + error);
-      })
+      });
   };
 
   const createRecord = () => {
@@ -83,7 +83,34 @@ const DailyResultComponent = () => {
       })
       .catch((err) => {
         alert("check error: " + err);
+      });
+  };
+
+  const getNotEndTask = (customData) => {
+
+    if(!customData.length) return null;
+
+    axios
+      .get(window.location.origin + "/task-notend", null)
+      .then((results) => {
+        console.log(results)
+        if(results.data.length <= 0) return null;
+        const arr = results.data;
+        const substituteWt = arr.map(result => {
+          return customData.map(data => {
+            if(data.date === result.date && data.workTime === "00:00"){
+              data.workTime = result.fullWorkTime;
+              return data;
+            }else{
+              return data;
+            }
+          });
+        })
+        dispatch(setDailyResult(substituteWt[substituteWt.length - 1]));
       })
+      .catch((error) => {
+        alert("render: " + error);
+      });
   };
 
   if (check) {
@@ -93,7 +120,7 @@ const DailyResultComponent = () => {
       createRecord();
     }
   }
-  
+
   if (loading) {
     return <Loading />;
   }
@@ -119,7 +146,11 @@ const DailyResultComponent = () => {
             dailyResults !== [] ? (
               <>
                 {dailyResults.map((res) => (
-                  <Result data={res} handler={setOpenModal} dailyData={setDailyData}/>
+                  <Result
+                    data={res}
+                    handler={setOpenModal}
+                    dailyData={setDailyData}
+                  />
                 ))}
               </>
             ) : (
@@ -128,7 +159,13 @@ const DailyResultComponent = () => {
           }
         </tbody>
       </Table>
-      {openModal && <ModalDailyResults show={setOpenModal} state={openModal} data={dailyData}/>}   
+      {openModal && (
+        <ModalDailyResults
+          show={setOpenModal}
+          state={openModal}
+          data={dailyData}
+        />
+      )}
     </>
   );
 };

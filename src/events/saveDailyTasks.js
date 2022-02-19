@@ -13,7 +13,7 @@ export function saveDailyTasks(e) {
 }
 
 
-export function fetchTask(arr, date){
+export function fetchTask(arr, date, ftw){
   const valueTask = Object.values(arr).map(x => x.map(y => {
     if(y.nodeName === 'INPUT'){
       return y.value;
@@ -22,12 +22,12 @@ export function fetchTask(arr, date){
     }
   }))
 
-  valueTask.forEach(x => sendTask(date, x[0], x[1]));
+  valueTask.forEach(x => sendTask(date, x[0], x[1], ftw));
 }
 
-function sendTask(date, name, value){
+function sendTask(date, name, value, finalWt){
 
-  const data = { date: date, task: name, wt: value};
+  const data = { date: date, task: name, wt: value, fwt: finalWt};
 
   const axios = require('axios');
   axios
