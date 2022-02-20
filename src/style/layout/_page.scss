@@ -59,6 +59,7 @@
           font-weight: 300;
           vertical-align: middle;
           border-bottom: 0;
+          transition: all 0.3s ease-in-out;
           &:last-child {
             text-align: right;
           }
@@ -117,6 +118,14 @@
         font-weight: 400;
         padding: 4px 13px;
         margin-bottom: 18px;
+      }
+    }
+    .task-group{
+      display: block;
+      margin-bottom: 9px;
+      .task-name{
+        text-transform: capitalize;
+        margin-right: 9px;
       }
     }
   }

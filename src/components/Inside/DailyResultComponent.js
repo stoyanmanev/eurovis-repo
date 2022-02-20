@@ -8,6 +8,7 @@ import { Table } from "react-bootstrap";
 import { setDailyResult } from "../../redux/actions";
 import { isLoading, isDailyResults } from "../../redux/reducers";
 import Loading from "../Templates/Loader";
+import ModalDailyView from "../Templates/ModalDailyView";
 
 const DailyResultComponent = () => {
   const dispatch = useDispatch();
@@ -17,8 +18,10 @@ const DailyResultComponent = () => {
   const [day, setDay] = useState(undefined);
   const [ip, setIp] = useState(undefined);
   const [check, setCheck] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalSend, setOpenModalSend] = useState(false);
+  const [openModalView, setOpenModalView] = useState(false);
   const [dailyData, setDailyData] = useState({});
+  const [viewTaskList, setViewTaskList] = useState([]);
 
   const renderDR = () => {
     axios
@@ -147,8 +150,10 @@ const DailyResultComponent = () => {
                 {dailyResults.map((res) => (
                   <Result
                     data={res}
-                    handler={setOpenModal}
+                    handler={setOpenModalSend}
+                    handlerView={setOpenModalView}
                     dailyData={setDailyData}
+                    setList={setViewTaskList}
                   />
                 ))}
               </>
@@ -158,11 +163,19 @@ const DailyResultComponent = () => {
           }
         </tbody>
       </Table>
-      {openModal && (
+      {openModalSend && (
         <ModalDailyResults
-          show={setOpenModal}
-          state={openModal}
+          show={setOpenModalSend}
+          state={openModalSend}
           data={dailyData}
+        />
+      )}
+      {openModalView && (
+        <ModalDailyView
+          show={setOpenModalView}
+          state={openModalView}
+          data={dailyData}
+          taskList={viewTaskList}
         />
       )}
     </>

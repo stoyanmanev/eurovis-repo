@@ -9,15 +9,15 @@ export function setWorkingTime(wt, date){
     el[0].innerText = cwt;
 }
 
-export function getDailyTaks(date, e){
+export function getDailyTask(date){
     const data = { date: date};
     const axios = require('axios');
     
-    axios
+    return axios
       .get(window.location.origin + "/task-results", { params: data })
       .then((res) => {
         if (res.status === 200) {
-          olderResult(JSON.parse(res.request.response), e, date)
+          return JSON.parse(res.request.response);
         }
       })
       .catch((err) => {
@@ -25,7 +25,8 @@ export function getDailyTaks(date, e){
       });
 }
 
-function olderResult(jdata, e, date){
+export async function olderResult(date, e){
+  const jdata = await getDailyTask(date);
   if(jdata.length === 0) return null;
   const data = {date};
   const axios = require('axios');
