@@ -34,7 +34,7 @@ function sendTask(date, name, value, finalWt){
       .post(window.location.origin + "/create-task", null, { params: data })
       .then((res) => {
         if (res.status === 200) {
-          console.log(res) // todo done record
+          return res // todo done record
         }
       })
       .catch((err) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -93,7 +93,6 @@ const DailyResultComponent = () => {
     axios
       .get(window.location.origin + "/task-notend", null)
       .then((results) => {
-        console.log(results)
         if(results.data.length <= 0) return null;
         const arr = results.data;
         const substituteWt = arr.map(result => {

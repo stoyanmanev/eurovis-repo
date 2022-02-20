@@ -40,6 +40,7 @@ const Result = (props) => {
         </Button>
       </td>
       <td>
+        {(!props.data.ipLogout && !props.data.timeEnd) &&
         <Button
           name="submitResult"
           className="submit-result"
@@ -47,6 +48,7 @@ const Result = (props) => {
         >
           <FontAwesomeIcon icon={faPaperPlane}></FontAwesomeIcon>
         </Button>
+        }
       </td>
       <td type="date">{props.data.date}</td>
       <td type="t-start">{props.data.timeStart}</td>

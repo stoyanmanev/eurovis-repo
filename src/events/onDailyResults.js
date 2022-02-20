@@ -27,9 +27,7 @@ export function getDailyTaks(date, e){
 
 function olderResult(jdata, e, date){
   if(jdata.length === 0) return null;
-  console.log(date)
   const data = {date};
-  console.log(data)
   const axios = require('axios');
   axios
       .delete(window.location.origin + "/task-delete", { params: data })

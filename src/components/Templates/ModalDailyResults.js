@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Modal, Button, Badge } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,9 +8,15 @@ import {
   faShareSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import Input from "../UI/Input";
-import { makeTaskGroup, getFormValues, calcFinalWT } from "../../events/onModal";
+import {
+  makeTaskGroup,
+  getFormValues,
+  calcFinalWT,
+} from "../../events/onModal";
 import { setWorkingTime } from "../../events/onDailyResults";
 import { saveDailyTasks, fetchTask } from "../../events/saveDailyTasks";
+import { getIp } from "./currentIp";
+import { getCurrentTime } from "./currentTime";
 
 export default function ModalDailyResults(props) {
   const [range, setRange] = useState(0);
@@ -90,6 +97,22 @@ export default function ModalDailyResults(props) {
     setRange(getMaxValueRange(props.data.startTime));
   };
 
+  function getCheckBoxTerms(area) {
+    const obj = {};
+    const item = area.querySelector("#save-send");
+    obj.item = item;
+    obj.isCheck = item.checked;
+    return obj;
+  }
+
+  function getWTvalue(area) {
+    const wt = area.querySelector("#working-time");
+    const obj = {};
+    obj.badge = wt.nextElementSibling;
+    obj.value = wt.nextElementSibling.innerHTML;
+    return obj;
+  }
+
   function handleClickAdd(e) {
     const parent = e.target.parentElement.parentElement;
     const children = parent.children;
@@ -98,15 +121,59 @@ export default function ModalDailyResults(props) {
     );
     makeTaskGroup(ticketArea, e, range);
   }
-  function submitHandler(e){
+
+  function sendTaks(e, obj, finalwt) {
+    const fetchData = saveDailyTasks(e);
+    setWorkingTime(finalwt, props.data.date);
+    fetchTask(fetchData, props.data.date, obj["working-time"]);
+    props.show(false);
+  }
+
+  function setTableValues(data) {
+    const row = document.getElementById(data.date);
+    row.querySelector('[type="t-end"]').innerText = data.time;
+    row.querySelector('[type="ip-of"]').innerText = data.logoutIp;
+    row.querySelector('[name="submitResult"]').remove();
+    return row;
+  }
+
+  async function submitHandler(e) {
     e.preventDefault();
     const obj = getFormValues(e.target);
     const finalwt = calcFinalWT(obj);
 
-    if(e.nativeEvent.submitter.id === "save-btn"){
-      const fetchData = saveDailyTasks(e);
-      setWorkingTime(finalwt, props.data.date);
-      const sendData = fetchTask(fetchData, props.data.date, obj['working-time']);
+    if (e.nativeEvent.submitter.id === "save-btn") {
+      sendTaks(e, obj, finalwt);
+    }
+
+    if (e.nativeEvent.submitter.id === "send-btn") {
+      const checkObj = getCheckBoxTerms(e.target);
+      const wtObj = getWTvalue(e.target);
+      if (checkObj.isCheck && wtObj.value !== "00:00") {
+        const sendObj = {};
+        sendObj.ip = await getIp();
+        sendObj.time = getCurrentTime();
+        if (sendObj.ip && sendObj.time && props.data.date) {
+          const data = {
+            time: sendObj.time.fullTime,
+            logoutIp: sendObj.ip,
+            wt: wtObj.value,
+            date: props.data.date,
+          };
+          sendTaks(e, obj, finalwt);
+          axios
+            .patch(window.location.origin + "/finalDay", null, { params: data })
+            .then((res) => {
+              setTableValues(data);
+              return res.request.response;
+            })
+            .catch((err) => {
+              throw new Error("Request Failed: 163-MDR.js" + err);
+            });
+        } else {
+          throw new Error("Missing information: 142-MDR.js");
+        }
+      }
     }
   }
 
@@ -146,7 +213,12 @@ export default function ModalDailyResults(props) {
           <span className="d-block text-uppercase">
             <strong>Work break time</strong>
           </span>
-          <form className="default" id="daily-form" method="post" onSubmit={submitHandler}>
+          <form
+            className="default"
+            id="daily-form"
+            method="post"
+            onSubmit={submitHandler}
+          >
             <div className="form-group">
               <Input
                 type="range"
@@ -189,10 +261,18 @@ export default function ModalDailyResults(props) {
               ></Input>
             </div>
             <div className="form-group btn-area">
-              <Button id="save-btn" className="text-uppercase save-btn" type="submit">
+              <Button
+                id="save-btn"
+                className="text-uppercase save-btn"
+                type="submit"
+              >
                 <FontAwesomeIcon icon={faSave} /> Save
               </Button>
-              <Button id="send-btn" className="text-uppercase send-btn" type="submit">
+              <Button
+                id="send-btn"
+                className="text-uppercase send-btn"
+                type="submit"
+              >
                 <FontAwesomeIcon icon={faShareSquare} /> Send
               </Button>
             </div>
