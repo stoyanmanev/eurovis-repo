@@ -9,6 +9,7 @@ import { setDailyResult } from "../../redux/actions";
 import { isLoading, isDailyResults } from "../../redux/reducers";
 import Loading from "../Templates/Loader";
 import ModalDailyView from "../Templates/ModalDailyView";
+import Pagination from "./Pagination";
 
 const DailyResultComponent = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,23 @@ const DailyResultComponent = () => {
   const [openModalView, setOpenModalView] = useState(false);
   const [dailyData, setDailyData] = useState({});
   const [viewTaskList, setViewTaskList] = useState([]);
+
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage] = useState(10);
+  const indexOfLastDailyResult = currentPage * postPerPage;
+  const indexOfFirstDailyResult = indexOfLastDailyResult - postPerPage;
+  const currentDailyResult =
+    dailyResults !== [] &&
+    dailyResults.slice(indexOfFirstDailyResult, indexOfLastDailyResult);
+
+  const paginate = (e, pageNumber) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setCurrentPage(pageNumber);
+  };
+
+  //--pagination
 
   const renderDR = () => {
     axios
@@ -90,24 +108,23 @@ const DailyResultComponent = () => {
   };
 
   const getNotEndTask = (customData) => {
-
-    if(!customData.length) return null;
+    if (!customData.length) return null;
 
     axios
       .get(window.location.origin + "/task-notend", null)
       .then((results) => {
-        if(results.data.length <= 0) return null;
+        if (results.data.length <= 0) return null;
         const arr = results.data;
-        const substituteWt = arr.map(result => {
-          return customData.map(data => {
-            if(data.date === result.date && data.workTime === "00:00"){
+        const substituteWt = arr.map((result) => {
+          return customData.map((data) => {
+            if (data.date === result.date && data.workTime === "00:00") {
               data.workTime = result.fullWorkTime;
               return data;
-            }else{
+            } else {
               return data;
             }
           });
-        })
+        });
         dispatch(setDailyResult(substituteWt[substituteWt.length - 1]));
       })
       .catch((error) => {
@@ -126,7 +143,6 @@ const DailyResultComponent = () => {
   if (loading) {
     return <Loading />;
   }
-
   return (
     <>
       <h1>Daily Results</h1>
@@ -145,9 +161,9 @@ const DailyResultComponent = () => {
         </thead>
         <tbody>
           {
-            dailyResults !== [] ? (
+            currentDailyResult !== [] ? (
               <>
-                {dailyResults.map((res) => (
+                {currentDailyResult.map((res) => (
                   <Result
                     data={res}
                     handler={setOpenModalSend}
@@ -163,6 +179,11 @@ const DailyResultComponent = () => {
           }
         </tbody>
       </Table>
+      <Pagination
+        resultPerPage={postPerPage}
+        totalResult={dailyResults.length}
+        paginate={paginate}
+      />
       {openModalSend && (
         <ModalDailyResults
           show={setOpenModalSend}
