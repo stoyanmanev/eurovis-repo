@@ -68,6 +68,8 @@ export default function ModalDailyResults(props) {
         let minutes = 0;
         let hour = 0;
 
+        if(sDes[0] === nDes[0] && sDes[1] === nDes[1]) return "00:00";
+
         parseInt(nDes[1]) > parseInt(sDes[1])
           ? (minutes = parseInt(nDes[1]) - parseInt(sDes[1]))
           : (minutes = parseInt(nDes[1]) + 60 - parseInt(sDes[1]));
@@ -77,7 +79,7 @@ export default function ModalDailyResults(props) {
 
         minutes < 10 ? (minutes = `0${minutes}`) : (minutes = `${minutes}`);
         hour < 10 ? (hour = `0${hour}`) : (hour = `${hour}`);
-
+        
         return `${hour}:${minutes}`;
       }
 
