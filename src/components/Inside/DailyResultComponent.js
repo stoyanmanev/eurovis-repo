@@ -42,9 +42,9 @@ const DailyResultComponent = () => {
     axios
       .get(window.location.origin + "/results", null)
       .then((res) => {
-        console.log(res.data.reverse());
-        dispatch(setDailyResult(res.data.reverse()));
-        getNotEndTask(res.data.reverse());
+        const list = res.data.reverse();
+        dispatch(setDailyResult(list));
+        getNotEndTask(list);
       })
       .catch((error) => {
         alert("render: " + error);
