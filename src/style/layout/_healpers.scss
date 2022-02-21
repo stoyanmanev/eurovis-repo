@@ -57,6 +57,16 @@
     background-color: $dark-medium;
     margin-bottom: 0;
   }
+  &.delete-task{
+    background-color: $alert;
+    padding: 0 16px;
+    margin: 0;
+    &:hover,
+    &:active,
+    &:focus{
+      background-color: $secondary;
+    }
+  }
 }
 
 // object-fit for images

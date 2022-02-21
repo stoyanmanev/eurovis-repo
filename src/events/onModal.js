@@ -36,6 +36,7 @@ function setValue(arr, val, target) {
 export function makeTaskGroup(area, e, range, data = {}) {
   const div = document.createElement("div");
   const appendList = [
+    makeDelete({ text: "Del" }),
     makeInput("text", e.timeStamp, data),
     makeInput("range", e.timeStamp, data),
     makeBadge(data),
@@ -47,12 +48,12 @@ export function makeTaskGroup(area, e, range, data = {}) {
     input.type = type;
     input.name = `${type}-${parseInt(unique)}`;
     input.id = `${type}-${parseInt(unique)}`;
-    data.task && (input.value = data.task)
+    data.task && (input.value = data.task);
 
     if (type === "range") {
       input.max = range;
       input.min = "0";
-      data.range ? input.value = data.range : input.value = "0";
+      data.range ? (input.value = data.range) : (input.value = "0");
       input.step = "5";
       input.onchange = function (e) {
         handleChange(e);
@@ -64,7 +65,16 @@ export function makeTaskGroup(area, e, range, data = {}) {
   function makeBadge(data = {}) {
     const span = document.createElement("span");
     span.classList.add("d-inline", "badge", "bg-secondary");
-    data.workTime ? span.innerHTML = data.workTime : span.innerHTML = "00:00";
+    data.workTime
+      ? (span.innerHTML = data.workTime)
+      : (span.innerHTML = "00:00");
+    return span;
+  }
+  function makeDelete(data) {
+    const span = document.createElement("span");
+    span.classList.add("delete-task", "btn");
+    data.text ? (span.innerHTML = data.text) : (span.innerHTML = "x");
+    span.addEventListener("click", removeTaskGroup);
     return span;
   }
   appendList.forEach((x) => div.appendChild(x));
@@ -72,6 +82,20 @@ export function makeTaskGroup(area, e, range, data = {}) {
 }
 
 //-- create new task when click the add button
+
+function removeTaskGroup(e) {
+  const target = e.target;
+
+  function searchTaskArea(el) {
+    if (el.parentElement.classList.contains("form-group"))
+      return target.parentElement.remove();
+    if (el.parentElement === null)
+      throw new Error("Task-Group not found: 89-oM.js");
+    searchTaskArea(el.parentElement);
+  }
+
+  return searchTaskArea(target);
+}
 
 export function getFormValues(form) {
   const inputs = Object.values(form.children).map((x) =>
@@ -144,16 +168,16 @@ function saveInputGroup(e) {
 
   const list = [];
   group.length > 0 &&
-  group
-    .forEach(
-      (x) => {if(typeof x?.value !== "undefined" && x.id !== "working-time"){
+    group.forEach((x) => {
+      if (typeof x?.value !== "undefined" && x.id !== "working-time") {
         list.push(x);
       }
-    }
-    )
+    });
 
-  const sum = list.length > 0 && list.map( x => parseInt(x.value)).reduce((a,b) => a + b);
-  const wb = list.filter(x => x.id === "work-break");
+  const sum =
+    list.length > 0 &&
+    list.map((x) => parseInt(x.value)).reduce((a, b) => a + b);
+  const wb = list.filter((x) => x.id === "work-break");
   const targetInput = document.getElementById("working-time");
   targetInput.value = sum;
   targetInput.dataset.break = wb[0].value;
