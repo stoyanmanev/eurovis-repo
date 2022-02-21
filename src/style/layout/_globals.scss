@@ -26,7 +26,10 @@ body {
 	line-height: $base-line-height;
 	opacity: 1 !important;
 	background: $white-gray;
+}
 
+#root{
+	min-height: 100vh;
 }
 
 iframe,

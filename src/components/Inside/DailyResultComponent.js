@@ -24,14 +24,13 @@ const DailyResultComponent = () => {
   const [dailyData, setDailyData] = useState({});
   const [viewTaskList, setViewTaskList] = useState([]);
 
-  //pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage] = useState(10);
   const indexOfLastDailyResult = currentPage * postPerPage;
   const indexOfFirstDailyResult = indexOfLastDailyResult - postPerPage;
   const currentDailyResult =
-    dailyResults !== [] &&
-    dailyResults.slice(indexOfFirstDailyResult, indexOfLastDailyResult);
+  dailyResults !== [] &&
+  dailyResults.slice(indexOfFirstDailyResult, indexOfLastDailyResult);
 
   const paginate = (e, pageNumber) => {
     e.stopPropagation();
@@ -39,14 +38,13 @@ const DailyResultComponent = () => {
     setCurrentPage(pageNumber);
   };
 
-  //--pagination
-
   const renderDR = () => {
     axios
       .get(window.location.origin + "/results", null)
       .then((res) => {
-        dispatch(setDailyResult(res.data));
-        getNotEndTask(res.data);
+        console.log(res.data.reverse());
+        dispatch(setDailyResult(res.data.reverse()));
+        getNotEndTask(res.data.reverse());
       })
       .catch((error) => {
         alert("render: " + error);
